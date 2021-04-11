@@ -14,7 +14,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const productsCollection = client.db("emaJohn2021").collection("item");
   const orderCollection = client.db("emaJohn2021").collection("orders");
-  console.log('connect database')
+  
  app.post('/addProducts', (req, res)=>{
      const products = req.body;
      productsCollection.insertOne(products)
@@ -26,7 +26,8 @@ client.connect(err => {
  })
 
  app.get('/products', (req, res)=>{
-    productsCollection.find({})
+     const search = req.query.search
+    productsCollection.find({name:{$regex:search}})
      .toArray((err, documents)=>{
          res.send(documents)
      })
